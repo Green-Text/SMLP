@@ -1,6 +1,11 @@
 import pandas
 import quandl
+import math
 
+'''
+    Regression Definition: Mathematical procedure to model data graphically. The types of models inlcude: linear, exponential and
+    logarithmic, to name a few. In terms of applications, it is used to forecast -predict- future trends for a set of data.
+'''
 dataFrame = quandl.get("WIKI/GOOGL")
 
 print(dataFrame.head())         # To see the data frame which is being worked on.
@@ -24,8 +29,17 @@ dataFrame["Adj. Close-Open Percentage (Percentage Change Per Day)"] = (dataFrame
 
 # Create a new data frame with the really wanted data
 '''
-    Of all the column names' Adj. Close is a feature given that it is required for computing the percentages at the end of the time frame.
-    They only way for it to be a label, as it is understood, is in the case that it is used to predict future values, which is not.
+    Of all the column names' Adj. Close is a feature given that it serves as an input as shown with line 23.
+    They only way for it to be a label is if its some sort of output, like: Adj. High-Low Percentage and Adj. Close-Open Percentage (Percentage Change Per Day).
 '''
 dataFrame = dataFrame[["Adj. Close", "Adj. High-Low Percentage", "Adj. Close-Open Percentage (Percentage Change Per Day)"]]
+
+forecastColumn = "Adj. Close"
+dataFrame.fillna(-99999, inplace=True)
+
+'''
+    What does line 43 do? It returns the number of days that correspond for % 10 of the data set.
+'''
+forecastOut = int(math.ceil(0.01*len(dataFrame)))
+dataFrame["label"] = dataFrame[forecastColumn].shift(-forecastOut)
 print(dataFrame.head())
