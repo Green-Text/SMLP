@@ -12,15 +12,14 @@ def graphData(someData):
         ax2 = fig.add_subplot(grids[1,0])
 
         sourceCode = pd.read_csv(os.path.join(os.path.dirname(__file__), "Files", "Example_CSV_ADP_DATA.csv"))
-        startIndex = list(pd.DatetimeIndex(sourceCode["Date"]).year).index(2021)
-        endIndex = list(pd.DatetimeIndex(sourceCode["Date"]).year).index(2022)
+        startIndex = list(pd.DatetimeIndex(sourceCode["Date"]).year).index(2022)
         
         sourceCode["Date"] = pd.to_datetime(sourceCode["Date"],format="%Y-%m-%d")   #    Convert to datetime format
 
         ax1.plot(sourceCode["Date"],sourceCode["Close"],label="Close Price")        # Fine
         
         ohcl = []
-        while startIndex < endIndex:
+        while startIndex < len(sourceCode["Date"]):
             #   Candlestick_ohlc needs float as date; hence, using date2num to convert to epoch floating format
             append_me = mdates.date2num(sourceCode["Date"][startIndex]), sourceCode["High"][startIndex], sourceCode["Low"][startIndex], sourceCode["Open"][startIndex], sourceCode["Close"][startIndex], sourceCode["Volume"][startIndex]
             ohcl.append(append_me)
